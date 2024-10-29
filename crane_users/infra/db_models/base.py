@@ -4,8 +4,7 @@ from sqlalchemy.orm import DeclarativeBase
 from crane_users.settings import settings
 
 
-class Base(AsyncAttrs, DeclarativeBase):
-	...
+class Base(AsyncAttrs, DeclarativeBase): ...
 
 
 engine = create_async_engine(str(settings.db_url))
