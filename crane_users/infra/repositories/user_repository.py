@@ -4,7 +4,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from crane_users.domain.entities.user import User
-from crane_users.interactors.ports.repositories.user import UserRepository
+from crane_users.interactor.ports.repositories.user import UserRepository
 from crane_users.infra.sqlalchemy_db.models.user import User as DBUser
 
 
