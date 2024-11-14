@@ -21,6 +21,6 @@ class User(Base):
             id=self.id,
             login=self.login,
             email=cast(Email, self.email),
-            password=cast(SecretStr, self.password_hash),
+            password_hash=cast(SecretStr, self.password_hash),
             company_id=None,
         )

@@ -10,5 +10,5 @@ class User(BaseModel):
     id: int
     login: str
     email: Email
-    password: SecretStr
+    password_hash: SecretStr
     company_id: int | None
