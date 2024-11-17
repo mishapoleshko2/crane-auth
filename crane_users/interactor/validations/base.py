@@ -1,14 +1,11 @@
 from typing import TypeAlias, Any, ClassVar
 
-from cerberus import Validator
+from cerberus import Validator  # type: ignore
 
 from crane_users.interactor.exceptions import DTOValidationError
 
 Schema: TypeAlias = dict[str, dict[str, Any]]
 Data: TypeAlias = dict[str, Any]
-
-
-
 
 
 class BaseValidator:
@@ -21,9 +18,9 @@ class BaseValidator:
             raise DTOValidationError(msg)
 
     def _create_error_msg(self, errors: dict[str, list[str]]) -> str:
-        errors = [
+        converted_errors = [
             f"{key.capitalize()}: {', '.join(key_errors)}"
             for key, key_errors in errors.items()
         ]
-        msg = "/n".join(errors)
+        msg = "/n".join(converted_errors)
         return msg

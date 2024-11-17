@@ -15,13 +15,15 @@ class PostgresUserRepository(UserRepository):
     async def find_user_by_email(self, email: str) -> User | None:
         query = select(DBUser).where(DBUser.email == email)
         result = await self.session.execute(query)
-        user = result.scalar_one_or_none()
+        db_user = result.scalar_one_or_none()
+        user = db_user.to_entity() if db_user else None
         return user
 
     async def find_user_by_login(self, login: str) -> User | None:
         query = select(DBUser).where(DBUser.login == login)
         result = await self.session.execute(query)
-        user = result.scalar_one_or_none()
+        db_user= result.scalar_one_or_none()
+        user = db_user.to_entity() if db_user else None
         return user
 
     async def create_user(self, login: str, email: str, password_hash: str) -> User:
