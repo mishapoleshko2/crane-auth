@@ -4,6 +4,8 @@ import bcrypt
 
 from pydantic import BaseModel, SecretStr
 
+from crane_users.domain.value_objects.roles import UserRole
+
 
 Email = NewType("Email", str)
 PSWD_CODING = "utf-8"
@@ -21,3 +23,4 @@ class User(BaseModel):
     email: Email
     password_hash: SecretStr
     company_id: int | None
+    role: UserRole

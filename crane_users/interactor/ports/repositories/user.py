@@ -1,10 +1,13 @@
 from typing import Protocol
 
 from crane_users.domain.entities.user import User
+from crane_users.domain.value_objects.roles import UserRole
 
 
 class UserRepository(Protocol):
-    async def create_user(self, login: str, email: str, password_hash: str) -> User: ...
+    async def create_user(
+        self, login: str, email: str, password_hash: str, role: UserRole = UserRole.user
+    ) -> User: ...
 
     async def find_user_by_email(self, email: str) -> User | None: ...
 
