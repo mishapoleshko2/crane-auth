@@ -1,17 +1,17 @@
 from dataclasses import dataclass
 
 
-from crane_users.interactor.dto.user import UserCreatingInputDTO
+from crane_users.interactor.dto.user import UserCreatingInputDTO, UserCreatingOutputDTO
 from crane_users.interactor.ports.repositories.user import UserRepository
 from crane_users.interactor.validations.creating_user import CreatingUserDataValidation
-from crane_users.domain.entities.user import hash_password, User
+from crane_users.domain.entities.user import hash_password
 
 
 @dataclass
 class UserCreatingUseCase:
     user_repository: UserRepository
 
-    async def execute(self, input_dto: UserCreatingInputDTO) -> User:
+    async def execute(self, input_dto: UserCreatingInputDTO) -> UserCreatingOutputDTO:
         validation = CreatingUserDataValidation()
         validation.validate(input_dto.as_dict())
 
@@ -20,4 +20,11 @@ class UserCreatingUseCase:
             input_dto.login, input_dto.email, hashed_pswd
         )
 
-        return user
+        output_dto = UserCreatingOutputDTO(
+            id=user.id,
+            login=user.login,
+            email=user.email,
+            password=input_dto.password,
+        )
+
+        return output_dto

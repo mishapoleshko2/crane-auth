@@ -11,3 +11,8 @@ class UserCreatingInputDTO:
 
     def as_dict(self) -> dict[str, Any]:
         return asdict(self)
+
+
+@dataclass
+class UserCreatingOutputDTO(UserCreatingInputDTO):
+    id: int

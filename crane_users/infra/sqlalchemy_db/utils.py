@@ -1,12 +1,9 @@
 from typing import AsyncIterator
-from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from crane_users.infra.sqlalchemy_db.base import async_session
 
-
-@asynccontextmanager
 async def get_session(with_commit: bool = False) -> AsyncIterator[AsyncSession]:
     try:
         async with async_session() as session:
