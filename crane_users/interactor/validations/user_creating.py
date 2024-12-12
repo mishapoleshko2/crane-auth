@@ -18,12 +18,13 @@ def validate_email(field: str, value: str, error: Callable[[str, str], None]) ->
         error(field, "invalid value")
 
 
-class CreatingUserDataValidation(BaseValidator):
+class UserCreatingDataValidator(BaseValidator):
     schema = {
-        "login": {"type": "string"},
-        "email": {"type": "string", "check_with": validate_email},
+        "login": {"type": "string", "required": True},
+        "email": {"type": "string", "required": True, "check_with": validate_email},
         "password": {
             "type": "string",
+            "required": True,
             "check_with": validate_password,
         },
     }

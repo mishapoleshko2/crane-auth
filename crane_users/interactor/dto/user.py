@@ -1,18 +1,16 @@
 from typing import Any
 
-from dataclasses import dataclass, asdict
+from pydantic import BaseModel
 
 
-@dataclass
-class UserCreatingInputDTO:
+class UserCreatingInputDTO(BaseModel):
     login: str
     email: str
     password: str
 
     def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        return self.model_dump()
 
 
-@dataclass
 class UserCreatingOutputDTO(UserCreatingInputDTO):
     id: int

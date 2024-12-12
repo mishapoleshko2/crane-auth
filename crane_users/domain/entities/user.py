@@ -2,7 +2,7 @@ from typing import NewType
 
 import bcrypt
 
-from pydantic import BaseModel, SecretStr
+from pydantic import SecretStr, BaseModel
 
 from crane_users.domain.value_objects.roles import UserRole
 
@@ -24,3 +24,10 @@ class User(BaseModel):
     password_hash: SecretStr
     company_id: int | None
     role: UserRole
+
+    def is_me(self, password: str) -> bool:
+        # TODO (poleshkomi): Understand type conversion
+        ans = bcrypt.checkpw(
+            bytes(password, PSWD_CODING), bytes(str(self.password_hash), PSWD_CODING)
+        )
+        return ans

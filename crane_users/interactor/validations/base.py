@@ -2,20 +2,22 @@ from typing import TypeAlias, Any, ClassVar
 
 from cerberus import Validator  # type: ignore
 
-from crane_users.interactor.exceptions import DTOValidationError
+from crane_users.interactor.exceptions import DTOValidationException
 
 Schema: TypeAlias = dict[str, dict[str, Any]]
 Data: TypeAlias = dict[str, Any]
+ValidatorengineT = type[Validator]
 
 
 class BaseValidator:
     schema: ClassVar[Schema]
+    validator_engine: ClassVar[ValidatorengineT] = Validator
 
     def validate(self, data: Data) -> None:
-        validator = Validator(self.schema)
+        validator = self.validator_engine(self.schema)
         if not validator.validate(data):
             msg = self._create_error_msg(validator.errors)
-            raise DTOValidationError(msg)
+            raise DTOValidationException(msg)
 
     def _create_error_msg(self, errors: dict[str, list[str]]) -> str:
         converted_errors = [

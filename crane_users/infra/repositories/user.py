@@ -10,7 +10,7 @@ from crane_users.infra.sqlalchemy_db.models.user import User as DBUser
 
 
 @dataclass
-class PostgresUserRepository(UserRepository):
+class PgUserRepository(UserRepository):
     session: AsyncSession
 
     async def find_user_by_email(self, email: str) -> User | None:
