@@ -7,7 +7,7 @@ from crane_users.domain.entities.tokens import (
     calc_access_token_expiration,
     generate_access_token,
 )
-from crane_users.domain.exceptions import UserNotFound, IncorrectPasswordError
+from crane_users.domain.exceptions import UserNotFoundError, IncorrectPasswordError
 from crane_users.interactor.dto.auth import UserLoginInputDTO, UserLoginOutputDTO
 from crane_users.interactor.ports.repositories.refresh_session import (
     RefreshSessionRepository,
@@ -33,7 +33,7 @@ class UserLoginUseCase:
             )
 
         if not user:
-            raise UserNotFound
+            raise UserNotFoundError
 
         if not user.is_me(input_dto.password):
             raise IncorrectPasswordError

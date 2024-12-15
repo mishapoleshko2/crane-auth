@@ -6,6 +6,9 @@ class IncorrectPasswordError(SystemException):
         super().__init__("Invalid password")
 
 
-class UserNotFound(SystemException):
+class UserNotFoundError(SystemException):
     def __init__(self) -> None:
         super().__init__("User not found")
+
+
+class RefreshSessionNotFoundException(SystemException): ...

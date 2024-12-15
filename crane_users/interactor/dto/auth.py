@@ -20,3 +20,7 @@ class UserLoginOutputDTO(BaseModel):
     refresh_token: RefreshToken
     refresh_token_ttl: int
     refresh_token_expires: datetime
+
+
+class UserLogoutInputDTO(BaseModel):
+    refresh_token: RefreshToken
