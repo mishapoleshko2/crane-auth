@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse, Response
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
-from crane_users.app.exceptions import AutharizationError
+from crane_users.app.utils import get_refresh_token_from_cookie
 from crane_users.infra.repositories.refresh_session_repository import (
     PgRefreshSesionRepository,
 )
@@ -46,19 +46,19 @@ async def login(
 
 @auth_router.post("/logout", summary="user logout")
 async def logout(
-    request: Request, session: Annotated[AsyncSession, Depends(get_session)]
+    refresh_token: Annotated[UUID, Depends(get_refresh_token_from_cookie)],
+    session: Annotated[AsyncSession, Depends(get_session)],
+    response: Response,
 ) -> Response:
-    refresh_token = request.cookies.get("refresh-token", None)
-    if not refresh_token:
-        raise AutharizationError
-
     refresh_session_repo = PgRefreshSesionRepository(session)
     use_case = UserLogoutUseCase(refresh_session_repo)
-    input_dto = UserLogoutInputDTO(refresh_token=cast(UUID, refresh_token))
+    input_dto = UserLogoutInputDTO(refresh_token=refresh_token)
     await use_case.execute(input_dto)
-    return Response()
+
+    response.delete_cookie("refresh-token")
+    return response
 
 
-@auth_router.post("refresh-tokens", summary="token refresh")
+@auth_router.post("/refresh-tokens", summary="token refresh")
 async def refresh_token() -> Response:
     return Response()
