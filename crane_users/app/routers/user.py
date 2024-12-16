@@ -9,7 +9,7 @@ from crane_users.interactor.dto.user import UserCreatingInputDTO, UserCreatingOu
 from crane_users.infra.sqlalchemy_db.utils import get_session
 from crane_users.infra.repositories.user import PgUserRepository
 
-user_router = APIRouter(prefix="/auth/users", tags=["Users"])
+user_router = APIRouter(prefix="/api/auth/users", tags=["Users"])
 
 
 @user_router.post("/", response_model=UserCreatingOutputDTO, summary="User creating")
