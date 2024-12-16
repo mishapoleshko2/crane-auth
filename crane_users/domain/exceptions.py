@@ -12,3 +12,6 @@ class UserNotFoundError(SystemException):
 
 
 class RefreshSessionNotFoundException(SystemException): ...
+
+
+class RefreshSessionIsExpiredException(SystemException): ...

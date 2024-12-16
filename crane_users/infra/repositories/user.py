@@ -40,3 +40,8 @@ class PgUserRepository(UserRepository):
     async def delete_user(self, user_id: int) -> None:
         await self.session.execute(delete(DBUser).where(DBUser.id == user_id))
         await self.session.commit()
+
+    async def get_user(self, user_id: int) -> User | None:
+        db_user = await self.session.get(DBUser, user_id)
+        user = db_user.to_entity() if db_user else None
+        return user

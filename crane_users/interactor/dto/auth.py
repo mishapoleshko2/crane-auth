@@ -24,3 +24,10 @@ class UserLoginOutputDTO(BaseModel):
 
 class UserLogoutInputDTO(BaseModel):
     refresh_token: RefreshToken
+
+
+TokenRefreshInputDTO = UserLogoutInputDTO
+
+
+class TokenRefreshOutputDTO(BaseModel):
+    access_token: JWTToken

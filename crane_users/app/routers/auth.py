@@ -1,7 +1,7 @@
-from typing import Annotated, cast
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse, Response
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
@@ -11,7 +11,13 @@ from crane_users.infra.repositories.refresh_session_repository import (
 )
 from crane_users.infra.repositories.user import PgUserRepository
 from crane_users.infra.sqlalchemy_db.utils import get_session
-from crane_users.interactor.dto.auth import UserLoginInputDTO, UserLogoutInputDTO
+from crane_users.interactor.dto.auth import (
+    UserLoginInputDTO,
+    UserLogoutInputDTO,
+    TokenRefreshInputDTO,
+    TokenRefreshOutputDTO,
+)
+from crane_users.interactor.use_cases.auth.token_refresh import TokenRefreshUseCase
 from crane_users.interactor.use_cases.auth.user_login import UserLoginUseCase
 from crane_users.interactor.use_cases.auth.user_logout import UserLogoutUseCase
 
@@ -60,5 +66,14 @@ async def logout(
 
 
 @auth_router.post("/refresh-tokens", summary="token refresh")
-async def refresh_token() -> Response:
-    return Response()
+async def refresh_token(
+    refresh_token: Annotated[UUID, Depends(get_refresh_token_from_cookie)],
+    session: Annotated[AsyncSession, Depends(get_session)],
+) -> TokenRefreshOutputDTO:
+    refresh_session_repo = PgRefreshSesionRepository(session)
+    user_repo = PgUserRepository(session)
+    use_case = TokenRefreshUseCase(user_repo, refresh_session_repo)
+    output_dto = await use_case.execute(
+        TokenRefreshInputDTO(refresh_token=refresh_token)
+    )
+    return output_dto

@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 
-from crane_users.domain.exceptions import (
-    RefreshSessionNotFoundException,
-)
+from crane_users.domain.exceptions import RefreshSessionNotFoundException
 from crane_users.interactor.dto.auth import UserLogoutInputDTO
 from crane_users.interactor.ports.repositories.refresh_session import (
     RefreshSessionRepository,
@@ -19,4 +17,4 @@ class UserLogoutUseCase:
                 input_dto.refresh_token
             )
         except Exception:
-            raise RefreshSessionNotFoundException from None
+            raise RefreshSessionNotFoundException

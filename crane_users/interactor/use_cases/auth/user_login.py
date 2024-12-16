@@ -4,8 +4,7 @@ from datetime import datetime, UTC
 
 from crane_users.domain.entities.tokens import (
     RefreshSession,
-    calc_access_token_expiration,
-    generate_access_token,
+    generate_user_access_token,
 )
 from crane_users.domain.exceptions import UserNotFoundError, IncorrectPasswordError
 from crane_users.interactor.dto.auth import UserLoginInputDTO, UserLoginOutputDTO
@@ -42,13 +41,7 @@ class UserLoginUseCase:
         refresh_session = RefreshSession(user_id=user.id, created_dt=now)
         await self.refresh_session_repository.create_session(refresh_session)
 
-        access_token = generate_access_token(
-            {
-                "user_id": user.id,
-                "company_id": user.company_id,
-                "exp": calc_access_token_expiration(now),
-            }
-        )
+        access_token = generate_user_access_token(user, now)
 
         return UserLoginOutputDTO(
             access_token=access_token,

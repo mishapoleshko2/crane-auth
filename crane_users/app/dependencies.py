@@ -1,4 +1,4 @@
-from typing import cast, Annotated
+from typing import cast
 from uuid import UUID
 
 from fastapi import Request
