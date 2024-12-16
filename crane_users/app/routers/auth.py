@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse, Response
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
-from crane_users.app.utils import get_refresh_token_from_cookie
+from crane_users.app.dependencies import get_refresh_token_from_cookie
 from crane_users.infra.repositories.refresh_session_repository import (
     PgRefreshSesionRepository,
 )
