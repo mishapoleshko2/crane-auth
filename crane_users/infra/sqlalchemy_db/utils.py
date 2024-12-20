@@ -1,4 +1,5 @@
 from typing import AsyncIterator
+from contextlib import asynccontextmanager
 
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
@@ -15,4 +16,7 @@ async def get_session(with_commit: bool = False) -> AsyncIterator[AsyncSession]:
         await session.rollback()
         raise e
     finally:
+        print("close")
         await session.close()
+
+get_context_session = asynccontextmanager(get_session)

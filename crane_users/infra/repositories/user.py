@@ -2,7 +2,9 @@ from dataclasses import dataclass
 
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.exc import IntegrityError
 
+from crane_users.domain.exceptions import UserIsExistError
 from crane_users.domain.entities.user import User
 from crane_users.domain.value_objects.roles import UserRole
 from crane_users.interactor.ports.repositories.user import UserRepository
@@ -34,7 +36,12 @@ class PgUserRepository(UserRepository):
             login=login, email=email, password_hash=password_hash, role=role
         )
         self.session.add(db_user)
-        await self.session.commit()
+        try:
+            await self.session.commit()
+        except Exception as e:
+            if isinstance(e, IntegrityError) and 'duplicate key value' in str(e):
+                raise UserIsExistError("User with the same login/email is exist") from None
+            raise e
         return db_user.to_entity()
 
     async def delete_user(self, user_id: int) -> None:
