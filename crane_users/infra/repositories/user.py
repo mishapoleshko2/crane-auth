@@ -39,8 +39,10 @@ class PgUserRepository(UserRepository):
         try:
             await self.session.commit()
         except Exception as e:
-            if isinstance(e, IntegrityError) and 'duplicate key value' in str(e):
-                raise UserIsExistError("User with the same login/email is exist") from None
+            if isinstance(e, IntegrityError) and "duplicate key value" in str(e):
+                raise UserIsExistError(
+                    "User with the same login/email is exist"
+                ) from None
             raise e
         return db_user.to_entity()
 

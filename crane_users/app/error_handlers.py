@@ -18,8 +18,10 @@ def handle_system_exc(_: Request, exc: Exception) -> Response:
 def handle_422_exc(_: Request, exc: Exception) -> Response:
     return _handle_exception(422, str(exc))
 
+
 def handle_409_exc(_: Request, exc: Exception) -> Response:
     return _handle_exception(409, str(exc))
+
 
 def _handle_exception(status_code: int, msg: str) -> Response:
     return JSONResponse(status_code=status_code, content={"msg": msg})

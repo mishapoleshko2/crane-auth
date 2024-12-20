@@ -19,4 +19,5 @@ async def get_session(with_commit: bool = False) -> AsyncIterator[AsyncSession]:
         print("close")
         await session.close()
 
+
 get_context_session = asynccontextmanager(get_session)
