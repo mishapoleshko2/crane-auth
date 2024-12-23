@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, delete
 
 from crane_users.domain.entities.tokens import RefreshSession
 from crane_users.interactor.ports.repositories.refresh_session import (
@@ -25,12 +25,8 @@ class PgRefreshSesionRepository(RefreshSessionRepository):
         return session
 
     async def delete_user_session(self, user_id: int) -> None:
-        query = select(DBRefreshSession).where(DBRefreshSession.user_id == user_id)
-        result = await self.session.execute(query)
-        db_session = result.scalar_one_or_none()
-        if not db_session:
-            return
-        await self.session.delete(db_session)
+        query = delete(DBRefreshSession).where(DBRefreshSession.user_id == user_id)
+        await self.session.execute(query)
         await self.session.commit()
 
     async def create_session(self, session: RefreshSession) -> RefreshSession:
@@ -45,10 +41,6 @@ class PgRefreshSesionRepository(RefreshSessionRepository):
         return session
 
     async def delete_session(self, token: RefreshToken) -> None:
-        query = select(DBRefreshSession).where(DBRefreshSession.token == token)
-        result = await self.session.execute(query)
-        db_session = result.scalar_one_or_none()
-        if not db_session:
-            return
-        await self.session.delete(db_session)
+        query = delete(DBRefreshSession).where(DBRefreshSession.token == token)
+        await self.session.execute(query)
         await self.session.commit()

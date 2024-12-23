@@ -16,7 +16,6 @@ async def get_session(with_commit: bool = False) -> AsyncIterator[AsyncSession]:
         await session.rollback()
         raise e
     finally:
-        print("close")
         await session.close()
 
 
