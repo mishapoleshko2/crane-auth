@@ -33,7 +33,9 @@ class JWTPayload(TypedDict):
 
 def generate_access_token(payload: JWTPayload) -> JWTToken:
     pld = cast(dict[str, Any], payload)
-    token = jwt.encode(pld, settings.jwt_secret, settings.jwt_encoding_algorithm)
+    token = jwt.encode(
+        pld, settings.jwt_secret.get_secret_value(), settings.jwt_encoding_algorithm
+    )
     return token
 
 

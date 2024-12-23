@@ -6,13 +6,16 @@ from crane_users.domain.entities.tokens import (
     RefreshSession,
     generate_user_access_token,
 )
-from crane_users.domain.exceptions import UserNotFoundError, IncorrectPasswordError
+from crane_users.domain.exceptions import (
+    UserIsNotRegisteredException,
+    IncorrectPasswordError,
+)
 from crane_users.interactor.dto.auth import UserLoginInputDTO, UserLoginOutputDTO
 from crane_users.interactor.ports.repositories.refresh_session import (
     RefreshSessionRepository,
 )
 from crane_users.interactor.ports.repositories.user import UserRepository
-from crane_users.interactor.validations.user_creating import UserCreatingDataValidator
+from crane_users.interactor.validations.user_login import UserLoginDataValidator
 
 
 @dataclass
@@ -21,7 +24,7 @@ class UserLoginUseCase:
     refresh_session_repository: RefreshSessionRepository
 
     async def execute(self, input_dto: UserLoginInputDTO) -> UserLoginOutputDTO:
-        validator = UserCreatingDataValidator()
+        validator = UserLoginDataValidator()
         validator.validate(input_dto.as_dict())
 
         if input_dto.email:
@@ -32,10 +35,12 @@ class UserLoginUseCase:
             )
 
         if not user:
-            raise UserNotFoundError
+            raise UserIsNotRegisteredException
 
         if not user.is_me(input_dto.password):
-            raise IncorrectPasswordError
+            raise IncorrectPasswordError("not correnct login/email or password")
+
+        await self.refresh_session_repository.delete_user_session(user.id)
 
         now = datetime.now(UTC)
         refresh_session = RefreshSession(user_id=user.id, created_dt=now)

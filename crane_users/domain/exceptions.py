@@ -1,20 +1,22 @@
 from crane_users.exceptions import SystemException
 
 
-class IncorrectPasswordError(SystemException):
+class IncorrectPasswordError(SystemException): ...
+
+
+class UserIsNotRegisteredException(SystemException):
     def __init__(self) -> None:
-        super().__init__("Invalid password")
+        super().__init__("User is not registered")
 
 
-class UserNotFoundError(SystemException):
+class RefreshSessionNotFoundException(SystemException):
     def __init__(self) -> None:
-        super().__init__("User not found")
+        super().__init__("User is not authorized")
 
 
-class RefreshSessionNotFoundException(SystemException): ...
-
-
-class RefreshSessionIsExpiredException(SystemException): ...
+class RefreshSessionIsExpiredException(SystemException):
+    def __init__(self) -> None:
+        super().__init__("Refresh session timed out")
 
 
 class UserIsExistError(SystemException): ...

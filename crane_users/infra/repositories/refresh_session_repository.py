@@ -24,12 +24,13 @@ class PgRefreshSesionRepository(RefreshSessionRepository):
         session = db_session.to_entity() if db_session else None
         return session
 
-    async def delete_session(self, token: RefreshToken) -> None:
-        r_session = self.get_session(token)
-        if not r_session:
-            raise
-
-        await self.session.delete(r_session)
+    async def delete_user_session(self, user_id: int) -> None:
+        query = select(DBRefreshSession).where(DBRefreshSession.user_id == user_id)
+        result = await self.session.execute(query)
+        db_session = result.scalar_one_or_none()
+        if not db_session:
+            return
+        await self.session.delete(db_session)
         await self.session.commit()
 
     async def create_session(self, session: RefreshSession) -> RefreshSession:
@@ -42,3 +43,12 @@ class PgRefreshSesionRepository(RefreshSessionRepository):
         self.session.add(db_session)
         await self.session.commit()
         return session
+
+    async def delete_session(self, token: RefreshToken) -> None:
+        query = select(DBRefreshSession).where(DBRefreshSession.token == token)
+        result = await self.session.execute(query)
+        db_session = result.scalar_one_or_none()
+        if not db_session:
+            return
+        await self.session.delete(db_session)
+        await self.session.commit()

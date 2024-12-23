@@ -1,7 +1,7 @@
 from uuid import UUID
 from datetime import datetime
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import UUID as PostgresUUID
 
@@ -18,7 +18,9 @@ class RefreshSession(Base):
     )
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     ttl: Mapped[int] = mapped_column(nullable=False)
-    created_dt: Mapped[datetime] = mapped_column(nullable=False)
+    created_dt: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )
 
     def to_entity(self) -> DomainRefreshSession:
         return DomainRefreshSession(

@@ -51,7 +51,7 @@ def upgrade() -> None:
         sa.Column("token", sa.UUID(), nullable=False),
         sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("ttl", sa.Integer(), nullable=False),
-        sa.Column("created_dt", sa.DateTime(), nullable=False),
+        sa.Column("created_dt", sa.DateTime(timezone=True), nullable=False),
         sa.ForeignKeyConstraint(
             ["user_id"],
             ["user.id"],

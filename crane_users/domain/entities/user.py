@@ -14,7 +14,7 @@ PSWD_CODING = "utf-8"
 def hash_password(pswd: str) -> str:
     salt = bcrypt.gensalt()
     hashed_pswd = bcrypt.hashpw(bytes(pswd, PSWD_CODING), salt)
-    return str(hashed_pswd)
+    return hashed_pswd.decode(PSWD_CODING)
 
 
 class User(BaseModel):
@@ -26,8 +26,7 @@ class User(BaseModel):
     role: UserRole
 
     def is_me(self, password: str) -> bool:
-        # TODO (poleshkomi): Understand type conversion
-        ans = bcrypt.checkpw(
-            bytes(password, PSWD_CODING), bytes(str(self.password_hash), PSWD_CODING)
-        )
+        b_password = bytes(password, PSWD_CODING)
+        b_password_hash = bytes(self.password_hash.get_secret_value(), PSWD_CODING)
+        ans = bcrypt.checkpw(b_password, b_password_hash)
         return ans

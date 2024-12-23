@@ -12,5 +12,5 @@ def get_refresh_token_from_cookie(
 ) -> RefreshToken:
     refresh_token = request.cookies.get("refresh-token", None)
     if not refresh_token:
-        raise AutharizationError
+        raise AutharizationError("Refresh session not found")
     return cast(UUID, refresh_token)
