@@ -24,11 +24,9 @@ class TokenRefreshUseCase:
         refresh_session = await self.refresh_session_repository.get_session(
             input_dto.refresh_token
         )
-        now = datetime.now(UTC)
-
         if not refresh_session:
             raise RefreshSessionNotFoundException
-
+        now = datetime.now(UTC)
         if not refresh_session.is_fresh(now):
             raise RefreshSessionIsExpiredException
 
