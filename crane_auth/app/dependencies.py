@@ -7,7 +7,7 @@ from crane_auth.app.exceptions import AutharizationError
 from crane_auth.domain.value_objects.types import RefreshToken
 
 
-def get_refresh_token_from_cookie(
+async def get_refresh_token_from_cookie(
     request: Request,
 ) -> RefreshToken:
     refresh_token = request.cookies.get("refresh-token", None)

@@ -54,13 +54,14 @@ async def login(
 async def logout(
     refresh_token: Annotated[UUID, Depends(get_refresh_token_from_cookie)],
     session: Annotated[AsyncSession, Depends(get_session)],
-    response: Response,
+    # response: Response,
 ) -> Response:
     refresh_session_repo = PgRefreshSesionRepository(session)
     use_case = UserLogoutUseCase(refresh_session_repo)
     input_dto = UserLogoutInputDTO(refresh_token=refresh_token)
     await use_case.execute(input_dto)
 
+    response = JSONResponse(status_code=200, content={"msg": "ok"})
     response.delete_cookie("refresh-token")
     return response
 

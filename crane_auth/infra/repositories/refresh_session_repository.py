@@ -41,6 +41,6 @@ class PgRefreshSesionRepository(RefreshSessionRepository):
         return session
 
     async def delete_session(self, token: RefreshToken) -> None:
-        query = delete(DBRefreshSession).where(DBRefreshSession.token == token)
+        query = delete(DBRefreshSession).where(DBRefreshSession.token == str(token))
         await self.session.execute(query)
         await self.session.commit()
