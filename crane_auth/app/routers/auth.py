@@ -54,7 +54,6 @@ async def login(
 async def logout(
     refresh_token: Annotated[UUID, Depends(get_refresh_token_from_cookie)],
     session: Annotated[AsyncSession, Depends(get_session)],
-    # response: Response,
 ) -> Response:
     refresh_session_repo = PgRefreshSesionRepository(session)
     use_case = UserLogoutUseCase(refresh_session_repo)
