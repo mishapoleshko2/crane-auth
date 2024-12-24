@@ -7,8 +7,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from crane_users.settings import settings
-from crane_users.infra.sqlalchemy_db.base import Base
+from crane_auth.settings import settings
+from crane_auth.infra.sqlalchemy_db.base import Base
 
 
 # this is the Alembic Config object, which provides
