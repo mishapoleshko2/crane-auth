@@ -6,7 +6,7 @@ from crane_auth.domain.entities.tokens import (
     RefreshSession,
     generate_user_access_token,
 )
-from crane_auth.domain.exceptions import (
+from crane_auth.interactor.exceptions import (
     UserIsNotRegisteredException,
     IncorrectPasswordError,
 )
@@ -38,7 +38,7 @@ class UserLoginUseCase:
             raise UserIsNotRegisteredException
 
         if not user.is_me(input_dto.password):
-            raise IncorrectPasswordError("not correnct login/email or password")
+            raise IncorrectPasswordError
 
         await self.refresh_session_repository.delete_user_session(user.id)
 

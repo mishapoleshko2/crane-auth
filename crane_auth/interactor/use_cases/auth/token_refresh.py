@@ -3,7 +3,7 @@ from datetime import datetime, UTC
 from typing import cast
 
 from crane_auth.domain.entities.tokens import generate_user_access_token
-from crane_auth.domain.exceptions import (
+from crane_auth.interactor.exceptions import (
     RefreshSessionNotFoundException,
     RefreshSessionIsExpiredException,
 )

@@ -4,7 +4,7 @@ from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.exc import IntegrityError
 
-from crane_auth.domain.exceptions import UserIsExistError
+from crane_auth.interactor.exceptions import UserIsExistError
 from crane_auth.domain.entities.user import User
 from crane_auth.domain.value_objects.roles import UserRole
 from crane_auth.interactor.ports.repositories.user import UserRepository
@@ -40,9 +40,7 @@ class PgUserRepository(UserRepository):
             await self.session.commit()
         except Exception as e:
             if isinstance(e, IntegrityError) and "duplicate key value" in str(e):
-                raise UserIsExistError(
-                    "User with the same login/email is exist"
-                ) from None
+                raise UserIsExistError from None
             raise e
         return db_user.to_entity()
 

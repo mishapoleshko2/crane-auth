@@ -1,10 +1,10 @@
 from typing import Callable
 
-from fastapi import Request, Response
+from fastapi import Request, Response, status
 from fastapi.responses import JSONResponse
 
 from crane_auth.app.exceptions import AutharizationError
-from crane_auth.domain.exceptions import (
+from crane_auth.interactor.exceptions import (
     IncorrectPasswordError,
     RefreshSessionIsExpiredException,
     RefreshSessionNotFoundException,
@@ -19,19 +19,19 @@ __all__ = ["ERROR_HANDLING_MAPPING"]
 
 
 def handle_system_exc(_: Request, exc: Exception) -> Response:
-    return _handle_exception(500, str(exc))
+    return _handle_exception(status.HTTP_500_INTERNAL_SERVER_ERROR, str(exc))
 
 
 def handle_422_exc(_: Request, exc: Exception) -> Response:
-    return _handle_exception(422, str(exc))
+    return _handle_exception(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc))
 
 
 def handle_409_exc(_: Request, exc: Exception) -> Response:
-    return _handle_exception(409, str(exc))
+    return _handle_exception(status.HTTP_409_CONFLICT, str(exc))
 
 
 def handle_401_exc(_: Request, exc: Exception) -> Response:
-    return _handle_exception(401, str(exc))
+    return _handle_exception(status.HTTP_401_UNAUTHORIZED, str(exc))
 
 
 def _handle_exception(status_code: int, msg: str) -> Response:
