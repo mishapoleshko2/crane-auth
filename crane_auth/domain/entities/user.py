@@ -22,7 +22,6 @@ class User(BaseModel):
     login: str
     email: Email
     password_hash: SecretStr
-    company_id: int | None
     role: UserRole
 
     def is_me(self, password: str) -> bool:

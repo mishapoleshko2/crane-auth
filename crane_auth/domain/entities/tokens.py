@@ -27,7 +27,6 @@ class RefreshSession(BaseModel):
 
 class JWTPayload(TypedDict):
     user_id: int
-    company_id: int | None
     exp: datetime
 
 
@@ -45,11 +44,9 @@ def calc_access_token_expiration(created_dt: datetime) -> datetime:
 
 
 def generate_user_access_token(user: User, now: datetime) -> JWTToken:
-    access_token = generate_access_token(
-        {
-            "user_id": user.id,
-            "company_id": user.company_id,
-            "exp": calc_access_token_expiration(now),
-        }
-    )
+    payload: JWTPayload = {
+        "user_id": user.id,
+        "exp": calc_access_token_expiration(now),
+    }
+    access_token = generate_access_token(payload)
     return access_token

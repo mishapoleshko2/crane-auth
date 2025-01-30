@@ -27,6 +27,5 @@ class User(Base):
             login=self.login,
             email=cast(Email, self.email),
             password_hash=cast(SecretStr, self.password_hash),
-            company_id=None,
             role=self.role,
         )
