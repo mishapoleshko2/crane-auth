@@ -1,9 +1,12 @@
-import uvicorn
 import typer
+import uvicorn
 from fastapi import FastAPI
+import pyfiglet
+
 from crane_auth.app.routers.user import user_router
 from crane_auth.app.routers.auth import auth_router
 from crane_auth.app.error_handlers import ERROR_HANDLING_MAPPING
+
 
 app = FastAPI()
 app.include_router(user_router)
@@ -21,4 +24,5 @@ def main(
 
 
 if __name__ == "__main__":
+    typer.echo(pyfiglet.figlet_format("CRANE-AUTH", font="slant"))
     typer.run(main)
