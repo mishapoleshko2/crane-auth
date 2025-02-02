@@ -1,7 +1,7 @@
 import typer
 import uvicorn
 from fastapi import FastAPI
-import pyfiglet
+import pyfiglet     # type: ignore
 
 from crane_auth.app.routers.user import user_router
 from crane_auth.app.routers.auth import auth_router
